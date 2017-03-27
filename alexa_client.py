@@ -135,7 +135,7 @@ class AlexaClient():
         Returns:
             File path for the response audio file (str).
         """
-        with open(audio_file) as in_f:
+        with open(audio_file, 'rb') as in_f:
             url, headers, request_data = self.get_request_params()
             files = [
                 (

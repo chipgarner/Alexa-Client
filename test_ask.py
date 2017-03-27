@@ -9,6 +9,7 @@ TESTS_PATH = os.path.dirname(os.path.realpath(__file__))
 def main():
     alexa = AlexaClient()
     input = '{}/1.wav'.format(TESTS_PATH)
+    # input = 'C:/Alexa/Alexa-Client/sfweather.wav'
     save_to = 'out/test_ask.mp3'
     alexa.ask(input, save_to=save_to)
     print("Response saved to {}".format(save_to))

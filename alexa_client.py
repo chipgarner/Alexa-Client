@@ -19,7 +19,7 @@ class AlexaClient():
         self._client_secret = client_secret
         self._refresh_token = refresh_token
         self.temp_dir = temp_dir
-        os.system("mkdir -p {}".format(self.temp_dir))
+        # os.system("mkdir -p {}".format(self.temp_dir))
 
     def get_token(self, refresh=False):
         """Returns AVS access token.

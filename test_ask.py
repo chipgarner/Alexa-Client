@@ -3,20 +3,28 @@ to AVS, and saves it as `/tmp/test1.mp3`."""
 from alexa_client import AlexaClient
 import vlc
 import os
+import time
 
 TESTS_PATH = os.path.dirname(os.path.realpath(__file__))
 
 
+def play_mp3_file(file_path):
+    p = vlc.MediaPlayer(file_path)
+    p.play()
+    st = p.get_state()
+    while st != vlc.State.Ended:  # This works but shows a warning on def exit
+        st = p.get_state()
+        time.sleep(0.01)
+
+
 def main():
     alexa = AlexaClient()
-    input = '{}/sftides.wav'.format(TESTS_PATH)
+    input = '{}/1.wav'.format(TESTS_PATH)
     save_to = 'out/test_ask.mp3'
     alexa.ask(input, save_to=save_to)
     print("Response saved to {}".format(save_to))
-    p = vlc.MediaPlayer(save_to)
-    p.play()
-    while True:
-        pass
+
+    play_mp3_file(save_to)
 
 if __name__ == '__main__':
     main()

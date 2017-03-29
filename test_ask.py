@@ -12,14 +12,14 @@ def play_mp3_file(file_path):
     p = vlc.MediaPlayer(file_path)
     p.play()
     st = p.get_state()
-    while st != vlc.State.Ended:  # This works but shows a warning on def exit
+    while st != vlc.State.Ended:  # This works but shows a warning on program exit
         st = p.get_state()
         time.sleep(0.01)
 
 
 def main():
     alexa = AlexaClient()
-    input = '{}/1.wav'.format(TESTS_PATH)
+    input = '{}/sfweather.wav'.format(TESTS_PATH)
     save_to = 'out/test_ask.mp3'
     alexa.ask(input, save_to=save_to)
     print("Response saved to {}".format(save_to))

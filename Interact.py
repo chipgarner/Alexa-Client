@@ -1,12 +1,13 @@
-"""This test will send a pre-generated audio file in the `AlexaAks` directory
-to AVS, and saves it as `/AlexaOut/test1.mp3`, and then play the mp3 file."""
+
 from alexa_client import AlexaClient
 import vlc
 import os
 import time
+import Record
 
 LOCAL_PATH = os.path.dirname(os.path.realpath(__file__))
-ask_input = '{}/AlexaAsk/2.wav'.format(LOCAL_PATH)
+ask_input = '{}/AlexaAsk/fall.wav'.format(LOCAL_PATH)
+live_input = '{}/LiveRecordings/latest.wav'.format(LOCAL_PATH)
 
 
 def play_mp3_file(file_path):
@@ -25,6 +26,17 @@ def main():
     alexa = AlexaClient()
     input = ask_input
     save_to = 'AlexaOut/test_ask.mp3'
+    alexa.ask(input, save_to=save_to)
+    print("Response saved to {}".format(save_to))
+
+    play_mp3_file(save_to)
+
+    print('Begin recording')
+    Record.record_to_file('LiveRecordings/latest.wav')
+    print('Recorded if synchronous')
+
+    input = live_input
+    save_to = 'AlexaOut/test_ask2.mp3'
     alexa.ask(input, save_to=save_to)
     print("Response saved to {}".format(save_to))
 

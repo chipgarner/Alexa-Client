@@ -6,7 +6,7 @@ import os
 import time
 
 LOCAL_PATH = os.path.dirname(os.path.realpath(__file__))
-ask_input = '{}/AlexaAsk/2.wav'.format(LOCAL_PATH)
+ask_input = '{}/AlexaAsk/fall.wav'.format(LOCAL_PATH)
 
 
 def play_mp3_file(file_path):
@@ -14,10 +14,10 @@ def play_mp3_file(file_path):
     p.play()
     st = p.get_state()
     not_infinite = time.time()
-    while st != vlc.State.Ended:  # This works but shows a warning on program exit
+    while st != vlc.State.Ended and st != vlc.State.Error:  # This works but shows a warning on program exit
         st = p.get_state()
         time.sleep(0.01)
-        if time.time() - not_infinite > 10:
+        if time.time() - not_infinite > 30:
             break
 
 

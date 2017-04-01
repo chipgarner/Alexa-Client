@@ -24,21 +24,26 @@ def play_mp3_file(file_path):
 
 def main():
     alexa = AlexaClient()
+    record = Record.Record()
     input = ask_input
     save_to = 'AlexaOut/test_ask.mp3'
-    alexa.ask(input, save_to=save_to)
-    print("Response saved to {}".format(save_to))
+    status = alexa.ask(input, save_to=save_to)
+    print("Status = {}", status)
 
-    play_mp3_file(save_to)
+    if status == 200:
+        play_mp3_file(save_to)
 
     print('Begin recording')
-    Record.record_to_file('LiveRecordings/latest.wav')
-    print('Recorded if synchronous')
+    record.record_to_file('LiveRecordings/latest.wav')
+    print('Recording saved')
 
     input = live_input
-    save_to = 'AlexaOut/test_ask2.mp3'
-    alexa.ask(input, save_to=save_to)
-    print("Response saved to {}".format(save_to))
+    save_to = 'AlexaOut/test_ask.mp3'
+    status = alexa.ask(input, save_to=save_to)
+    print("Status = {}", status)
+
+    if status == 204: # silence or no data sent.
+        alexa.ask('AlexaAsk/No.wav', save_to=save_to)
 
     play_mp3_file(save_to)
 

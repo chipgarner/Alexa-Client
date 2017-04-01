@@ -12,14 +12,11 @@ import re
 class AlexaClient():
     def __init__(self, token=None, client_id=settings.CLIENT_ID,
             client_secret=settings.CLIENT_SECRET,
-            refresh_token=settings.REFRESH_TOKEN,
-            temp_dir=settings.TEMP_DIR, *args, **kwargs):
+            refresh_token=settings.REFRESH_TOKEN):
         self._token = token
         self._client_id = client_id
         self._client_secret = client_secret
         self._refresh_token = refresh_token
-        self.temp_dir = temp_dir
-        # os.system("mkdir -p {}".format(self.temp_dir))
 
     def get_token(self, refresh=False):
         """Returns AVS access token.
@@ -101,8 +98,7 @@ class AlexaClient():
         Returns:
             Path (str) to where the audio file is saved.
         """
-        if not save_to:
-            save_to = "{}/{}.mp3".format(self.temp_dir, uuid.uuid4())
+
         with open(save_to, 'wb') as f:
             if res.status_code == requests.codes.ok:
                 for v in res.headers['content-type'].split(";"):
@@ -148,6 +144,7 @@ class AlexaClient():
                 ('file', ('audio', in_f, 'audio/L16; rate=16000; channels=1'))
             ]
             res = requests.post(url, headers=headers, files=files)
+
             # Check for HTTP 403
             if res.status_code == 403:
                 # Try to refresh auth token
@@ -156,10 +153,6 @@ class AlexaClient():
                 url, headers, request_data = self.get_request_params()
                 # Resend request
                 res = requests.post(url, headers=headers, files=files)
-            return self.save_response_audio(res, save_to)
 
-    def clean(self):
-        """
-        Deletes all files and directories in the temporary directory.
-        """
-        os.system('rm -r {}/*'.format(self.temp_dir))
+            self.save_response_audio(res, save_to)
+            return res.status_code
